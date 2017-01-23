@@ -24,7 +24,18 @@
     "type": "git",
     "url": "git+https://github.com/Blocklevel/vue-howler.git"
   },
-  "keywords": [],
+  "keywords": [
+    "audio",
+    "sound",
+    "player",
+    "vue",
+    "mixin",
+    "mp3",
+    "wav",
+    "ogg",
+    "webm",
+    "aac"
+  ],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/Blocklevel/vue-howler/issues"
