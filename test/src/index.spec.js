@@ -19,9 +19,9 @@ const wait = (ms) => (data) => new Promise((resolve, reject) => {
  * Delay a Promise chain until an event is emitted on a Vue component
  * @param {any} component - The Vue component that will emit the event
  * @param {String} event - The name of the event to listen for
- * @param {Number} [timeout=0] - An optional timeout in milliseconds
+ * @param {Number} [timeout=3000] - An optional timeout in milliseconds. Defaults to 3000ms
  */
-const waitForEvent = (component, event, timeout = 0) =>
+const waitForEvent = (component, event, timeout = 3000) =>
   (data) => new Promise((resolve, reject) => {
     component.$on(event, () => {
       resolve(arguments)
@@ -136,7 +136,8 @@ const TestComponent = {
 
 /**
  * Make a new Vue instance for testing
- * @param {Object} data - The data object that will be passed to the Vue instance. This is merged into the defaults with lodash.assign
+ * @param {Object} data - The data object that will be passed to the Vue instance.
+ * This is merged into the defaults with lodash.assign
  * @returns {Vue} The new Vue instance
  */
 const makeTestInstance = (data) => {
@@ -182,11 +183,11 @@ describe('vue-howler mixin', function () {
         expect(p.seek).to.equal(0)
         expect(p.playing).to.be.false
       })
-      .then(waitForEvent(p, 'load', 3000))
+      .then(waitForEvent(p, 'load'))
       .then(() => {
         p.play()
       })
-      .then(waitForEvent(p, 'play', 3000))
+      .then(waitForEvent(p, 'play'))
       .then(wait(500))
       .then(() => {
         expect(p.duration).to.equal(206.208) // Duration of the 'RetroFuture Clean' mp3
@@ -194,7 +195,7 @@ describe('vue-howler mixin', function () {
         expect(p.playing).to.be.true
         p.stop()
       })
-      .then(waitForEvent(p, 'stop', 3000))
+      .then(waitForEvent(p, 'stop'))
       .then(() => {
         console.log('done!')
       })
