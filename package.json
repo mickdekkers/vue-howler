@@ -1,0 +1,73 @@
+{
+  "name": "vue-howler",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/vue-howler.js",
+  "scripts": {
+    "commit": "git-cz",
+    "dev": "webpack --config config/dev.js -w",
+    "build": "node config/build.js",
+    "test": "karma start ./test/karma.config.js --singleRun",
+    "test:watch": "karma start ./test/karma.config.js",
+    "prepublish": "node config/build.js"
+  },
+  "author": {
+    "name": "Mick Dekkers",
+    "email": "mickdekkersnl@gmail.com"
+  },
+  "config": {
+    "commitizen": {
+      "path": "node_modules/cz-conventional-changelog"
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Blocklevel/vue-howler.git"
+  },
+  "keywords": [],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Blocklevel/vue-howler/issues"
+  },
+  "homepage": "https://github.com/Blocklevel/vue-howler#readme",
+  "devDependencies": {
+    "babel-core": "^6.17.0",
+    "babel-eslint": "^7.0.0",
+    "babel-loader": "^6.2.5",
+    "babel-preset-es2015": "^6.16.0",
+    "babel-preset-es2015-rollup": "^1.2.0",
+    "babel-preset-stage-2": "^6.17.0",
+    "babel-register": "^6.16.3",
+    "chai": "^3.5.0",
+    "eslint": "^3.8.1",
+    "eslint-config-standard": "^6.2.0",
+    "eslint-friendly-formatter": "^2.0.6",
+    "eslint-import-resolver-webpack": "^0.7.0",
+    "eslint-loader": "^1.6.0",
+    "eslint-plugin-promise": "^3.3.0",
+    "eslint-plugin-standard": "^2.0.1",
+    "karma": "1.3.0",
+    "karma-babel-preprocessor": "^6.0.1",
+    "karma-chai": "^0.1.0",
+    "karma-chrome-launcher": "^2.0.0",
+    "karma-mocha": "^1.3.0",
+    "karma-mocha-reporter": "^2.2.0",
+    "karma-phantomjs-launcher": "^1.0.2",
+    "karma-sourcemap-loader": "^0.3.7",
+    "karma-webpack": "^1.8.0",
+    "mocha": "^3.1.2",
+    "rollup": "^0.36.4",
+    "rollup-plugin-babel": "^2.6.1",
+    "rollup-plugin-uglify": "^1.0.1",
+    "webpack": "^1.13.2",
+    "webpack-merge": "^0.17.0",
+    "zlib": "^1.0.5",
+    "commitizen": "^2.8.6",
+    "css-loader": "^0.25.0",
+    "cz-conventional-changelog": "^1.2.0",
+    "babel-plugin-syntax-async-functions": "^6.13.0",
+    "html-loader": "^0.4.4",
+    "sinon": "^1.17.6",
+    "style-loader": "^0.13.1"
+  }
+}
