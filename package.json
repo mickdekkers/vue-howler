@@ -82,6 +82,7 @@
     "zlib": "^1.0.5"
   },
   "dependencies": {
-    "howler": "^2.0.2"
+    "howler": "^2.0.2",
+    "lodash.clamp": "^4.0.3"
   }
 }
