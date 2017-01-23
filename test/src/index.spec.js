@@ -194,7 +194,7 @@ describe('vue-howler mixin', function () {
         expect(p.playing).to.be.true
         p.stop()
       })
-      .then(Vue.nextTick())
+      .then(waitForEvent(p, 'stop', 3000))
       .then(() => {
         console.log('done!')
       })
