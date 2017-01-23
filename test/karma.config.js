@@ -4,14 +4,14 @@ delete webpackConfig.entry
 
 module.exports = function (config) {
   config.set({
-    browsers: ['PhantomJS'],
+    browsers: ['Chrome'],
     frameworks: ['mocha', 'chai'],
     reporters: ['mocha'],
     files: [
         './index.js',
     ],
     plugins: [
-        'karma-phantomjs-launcher',
+        'karma-chrome-launcher',
         'karma-chai',
         'karma-mocha',
         'karma-webpack',
@@ -45,6 +45,8 @@ module.exports = function (config) {
     },
     webpackMiddleware: {
         noInfo: true
-    }
+    },
+    browserNoActivityTimeout: 30000,
+    restartOnFileChange: true
   });
 };
