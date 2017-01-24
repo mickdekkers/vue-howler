@@ -1,10 +1,11 @@
 var webpackConfig = require('../config/dev');
+var path = require('path')
 
 delete webpackConfig.entry
 
 module.exports = function (config) {
   config.set({
-    browsers: ['Chrome'],
+    browsers: ['Chrome_with_vue_devtools'],
     frameworks: ['mocha', 'chai'],
     reporters: ['mocha'],
     files: [
@@ -46,6 +47,12 @@ module.exports = function (config) {
         noInfo: true
     },
     browserNoActivityTimeout: 30000,
-    restartOnFileChange: true
+    restartOnFileChange: true,
+    customLaunchers: {
+      Chrome_with_vue_devtools: {
+        base: 'Chrome',
+        flags: ['--user-data-dir=' + path.join(__dirname, 'chrome')]
+      }
+    }
   });
 };

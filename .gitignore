@@ -1,3 +1,11 @@
 node_modules
 *.map
 *.log
+
+# Chrome data dir
+test/chrome/*
+!test/chrome/Default
+test/chrome/Default/*
+!test/chrome/Default/Extensions
+!test/chrome/Default/Preferences
+!test/chrome/Default/Secure Preferences
