@@ -79,6 +79,8 @@
     "sinon": "^1.17.6",
     "style-loader": "^0.13.1",
     "vue": "^2.1.10",
+    "vue-loader": "^10.0.2",
+    "vue-template-compiler": "^2.1.10",
     "webpack": "^1.13.2",
     "webpack-merge": "^0.17.0",
     "zlib": "^1.0.5"

@@ -2,6 +2,7 @@ import { expect } from 'chai'
 import assign from 'lodash/assign'
 import Vue from 'vue'
 import VueHowler from '../../dist/vue-howler'
+import TestComponent from '../fixtures/test-component.vue'
 
 /**
  * Delay a Promise chain for a number of ms
@@ -32,107 +33,6 @@ const waitForEvent = (component, event, timeout = 3000) =>
       }, timeout)
     }
   })
-
-
-/**
- * The component to test the mixin in
- */
-const TestComponent = {
-  render (createElement) {
-    return createElement(
-      'div',
-      [
-        createElement('button', {
-          on: {
-            click: this.togglePlayback
-          }
-        },
-        [
-          this.playing ? 'Pause' : 'Play'
-        ]),
-        createElement('button', {
-          on: {
-            click: this.stop
-          }
-        },
-        [
-          'Stop'
-        ]),
-        createElement('button', {
-          on: {
-            click: this.toggleMute
-          }
-        },
-        [
-          this.muted ? 'Unmute' : 'Mute'
-        ]),
-        createElement('button', {
-          on: {
-            click () {
-              this.setSeek(this.seek - 5)
-            }
-          }
-        },
-        [
-          'Seek -5'
-        ]),
-        createElement('button', {
-          on: {
-            click () {
-              this.setSeek(this.seek + 5)
-            }
-          }
-        },
-        [
-          'Seek +5'
-        ]),
-        createElement('button', {
-          on: {
-            click () {
-              this.setRate(this.rate - 0.25)
-            }
-          }
-        },
-        [
-          'Rate -25%'
-        ]),
-        createElement('button', {
-          on: {
-            click () {
-              this.setRate(this.rate + 0.25)
-            }
-          }
-        },
-        [
-          'Rate +25%'
-        ]),
-        createElement('button', {
-          on: {
-            click () {
-              this.setVolume(this.volume - 0.10)
-            }
-          },
-        },
-        [
-          'Volume -10%'
-        ]),
-        createElement('button', {
-          on: {
-            click () {
-              this.setVolume(this.volume + 0.10)
-            }
-          }
-        },
-        [
-          'Volume +10%'
-        ]),
-        createElement('br'),
-        `Duration: ${this.duration} Seek: ${this.seek}`
-      ]
-    )
-  },
-  mixins: [VueHowler]
-}
 
 /**
  * Make a new Vue instance for testing

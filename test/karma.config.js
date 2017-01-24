@@ -39,6 +39,11 @@ module.exports = function (config) {
               presets: ['es2015']
             },
             exclude: /node_modules/
+          },
+          {
+            test: /\.vue$/,
+            loader: 'vue-loader',
+            exclude: /node_modules/
           }
         ]
       }
