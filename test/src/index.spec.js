@@ -28,7 +28,7 @@ const waitForEvent = (component, event, timeout = 3000) =>
     })
     if (timeout > 0) {
       setTimeout(() => {
-        reject(new Error(`Timeout: '${event}' event took longer than ${timeout}ms to emit`))
+        reject(new Error(`Component failed to emit '${event}' event within ${timeout}ms`))
       }, timeout)
     }
   })
