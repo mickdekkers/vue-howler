@@ -147,6 +147,12 @@ const makeTestInstance = (data) => {
     ]
   }, data)
 
+  const container = document.createElement('div')
+  const className = `container-${Date.now()}`
+  container.classList = className
+
+  document.body.appendChild(container)
+
   return new Vue({
     render (createElement) {
       return createElement(
@@ -165,7 +171,7 @@ const makeTestInstance = (data) => {
       TestComponent
     },
     data,
-    el: 'body'
+    el: `.${className}`
   })
 }
 
