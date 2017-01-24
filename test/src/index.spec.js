@@ -35,51 +35,41 @@ const waitForEvent = (component, event, timeout = 3000) =>
   })
 
 /**
- * Make a new Vue instance for testing
+ * Make a new instance of the test component
  * @param {Object} data - The data object that will be passed to the Vue instance.
  * This is merged into the defaults with lodash.assign
+ * @param {Boolean} visible - Whether to visibly mount the component on the page
  * @returns {Vue} The new Vue instance
  */
-const makeTestInstance = (data) => {
+const makeTestInstance = (data, visible = true) => {
   data = assign({}, {
     sources: [
       require('file-loader!../fixtures/RetroFuture Clean.mp3')
     ]
   }, data)
 
-  const container = document.createElement('div')
-  const className = `container-${Date.now()}`
-  container.classList = className
+  const Ctor = Vue.extend(TestComponent)
+  let vm = new Ctor({ propsData: data })
 
-  document.body.appendChild(container)
+  if (visible) {
+    const container = document.createElement('div')
+    const className = `container-${Date.now()}`
+    container.classList = className
 
-  return new Vue({
-    render (createElement) {
-      return createElement(
-        'div',
-        [
-          createElement(TestComponent, {
-            props: {
-              sources: this.sources
-            },
-            ref: 'player'
-          })
-        ]
-      )
-    },
-    components: {
-      TestComponent
-    },
-    data,
-    el: `.${className}`
-  })
+    document.body.appendChild(container)
+    vm = vm.$mount(`.${className}`)
+  } else {
+    vm = vm.$mount()
+  }
+
+  return vm
 }
 
 describe('vue-howler mixin', function () {
   this.timeout(60000)
+
   it ('should play mp3s', () => {
-    const vm = makeTestInstance()
-    const p = vm.$refs.player
+    const p = makeTestInstance()
 
     return Vue.nextTick()
       .then(() => {
