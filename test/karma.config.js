@@ -11,7 +11,6 @@ module.exports = function (config) {
         './index.js',
     ],
     plugins: [
-        'karma-chrome-launcher',
         'karma-chai',
         'karma-mocha',
         'karma-webpack',
