@@ -129,6 +129,16 @@ export default {
     }
   },
 
+  computed: {
+    /**
+     * The progress of the playback on a scale of 0 to 1
+     */
+    progress () {
+      if (this.duration === 0) return 0
+      return (this.seek / this.duration)
+    }
+  },
+
   created () {
     this.$data._howl = new Howl({
       src: this.sources,

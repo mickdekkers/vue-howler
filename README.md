@@ -25,7 +25,7 @@ First create a component that uses the mixin
 <template>
   <div>
     <span>Total duration: {{ duration }} seconds</span>
-    <span>Progress: {{ (seek / duration * 100) }}%</span>
+    <span>Progress: {{ (progress * 100) }}%</span>
     <button @click="togglePlayback">{{ playing ? 'Pause' : 'Play' }}</button>
     <button @click="stop">Stop</button>
   </div>
@@ -129,6 +129,12 @@ The position of the playback in seconds
 Type: `Number`
 
 The duration of the audio in seconds
+
+#### `progress`
+
+Type: `Number`
+
+The progress of the playback on a scale of `0` to `1`
 
 ### Methods
 
