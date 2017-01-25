@@ -122,7 +122,7 @@ The rate (speed) of the playback on a scale of `0.5` to `4`
 
 Type: `Number`
 
-The position of playback in seconds
+The position of the playback in seconds
 
 #### `duration`
 
