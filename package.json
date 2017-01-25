@@ -41,6 +41,10 @@
     "url": "https://github.com/Blocklevel/vue-howler/issues"
   },
   "homepage": "https://github.com/Blocklevel/vue-howler#readme",
+  "files": [
+    "dist",
+    "yarn.lock"
+  ],
   "devDependencies": {
     "babel-core": "^6.17.0",
     "babel-eslint": "^7.0.0",
