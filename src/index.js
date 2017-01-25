@@ -54,19 +54,19 @@ export default {
        */
       muted: false,
       /**
-       * The volume of the playback
+       * The volume of the playback on a scale of 0 to 1
        */
       volume: 1.0,
       /**
-       * The rate (speed) of the playback
+       * The rate (speed) of the playback on a scale of 0.5 to 4
        */
       rate: 1.0,
       /**
-       * The position of playback
+       * The position of playback in seconds
        */
       seek: 0,
       /**
-       * The duration of the audio
+       * The duration of the audio in seconds
        */
       duration: 0,
       /**
@@ -208,7 +208,7 @@ export default {
       }
     },
     /**
-     * Stop the playback
+     * Stop the playback (also resets the seek to 0)
      */
     stop () {
       this.$data._howl.stop()
@@ -228,7 +228,7 @@ export default {
       this.muted = false
     },
     /**
-     * Toggle muting the playback
+     * Toggle muting and unmuting the playback
      */
     toggleMute () {
       this.$data._howl.mute(!this.muted)
@@ -236,7 +236,8 @@ export default {
     },
     /**
      * Set the volume of the playback
-     * @param {Number} newValue - The new volume
+     * @param {Number} newValue - The new volume.
+     * The value is clamped between 0 and 1
      */
     setVolume (newValue) {
       if (typeof newValue !== 'number') {
@@ -247,7 +248,8 @@ export default {
     },
     /**
      * Set the rate (speed) of the playback
-     * @param {Number} newValue - The new rate
+     * @param {Number} newValue - The new rate.
+     * The value is clamped between 0.5 and 4
      */
     setRate (newValue) {
       if (typeof newValue !== 'number') {
@@ -258,7 +260,8 @@ export default {
     },
     /**
      * Set the position of the playback
-     * @param {Number} newValue - The new position in seconds
+     * @param {Number} newValue - The new position in seconds.
+     * The value is clamped between 0 and the duration
      */
     setSeek (newValue) {
       if (typeof newValue !== 'number') {
