@@ -138,31 +138,31 @@ The progress of the playback on a scale of `0` to `1`
 
 ### Methods
 
-#### `play`
+#### `play()`
 
 Start the playback
 
-#### `pause`
+#### `pause()`
 
 Pause the playback
 
-#### `togglePlayback`
+#### `togglePlayback()`
 
 Toggle playing or pausing the playback
 
-#### `stop`
+#### `stop()`
 
 Stop the playback (also resets the `seek` to `0`)
 
-#### `mute`
+#### `mute()`
 
 Mute the playback
 
-#### `unmute`
+#### `unmute()`
 
 Unmute the playback
 
-#### `toggleMute`
+#### `toggleMute()`
 
 Toggle muting and unmuting the playback
 
