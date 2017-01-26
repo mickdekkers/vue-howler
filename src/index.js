@@ -108,7 +108,9 @@ export default {
           name: 'stop',
           hook: () => {
             this.playing = false
-            this.seek = this.$data._howl.seek()
+            if (this.$data._howl != null) {
+              this.seek = this.$data._howl.seek()
+            }
           }
         },
         'mute',
