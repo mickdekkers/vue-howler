@@ -150,6 +150,8 @@ export default {
       preload: this.preload
     })
 
+    this.duration = this.$data._howl.duration()
+
     // Bind to all Howl events
     this.$data._howlEvents = this.$data._howlEvents.map(event => {
       if (typeof event === 'string') {
