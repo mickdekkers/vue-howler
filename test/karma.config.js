@@ -46,6 +46,11 @@ module.exports = function (config) {
             exclude: /node_modules/
           }
         ]
+      },
+      resolve: {
+        alias: {
+          'vue-standalone': 'vue/dist/vue.common.js'
+        }
       }
     },
     webpackMiddleware: {

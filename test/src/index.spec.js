@@ -1,6 +1,6 @@
 import { expect } from 'chai'
 import assign from 'lodash/assign'
-import Vue from 'vue'
+import Vue from 'vue-standalone'
 import VueHowler from '../../dist/vue-howler'
 import TestComponent from '../fixtures/test-component.vue'
 
@@ -42,24 +42,22 @@ const waitForEvent = (component, event, timeout = 3000) =>
  * @returns {Vue} The new Vue instance
  */
 const makeTestInstance = (data, visible = true) => {
-  data = assign({}, {
-    sources: [
-      require('file-loader!../fixtures/RetroFuture Clean.mp3')
-    ]
-  }, data)
-
-  const Ctor = Vue.extend(TestComponent)
-  let vm = new Ctor({ propsData: data })
+  const vm = new Vue({
+    components: {
+      TestComponent
+    },
+    data: assign({}, {
+      sources: [
+        require('file-loader!../fixtures/RetroFuture Clean.mp3')
+      ]
+    }, data),
+    template: `
+      <test-component ref="player" :sources="sources"></test-component>
+    `
+  }).$mount()
 
   if (visible) {
-    const container = document.createElement('div')
-    const className = `container-${Date.now()}`
-    container.classList = className
-
-    document.body.appendChild(container)
-    vm = vm.$mount(`.${className}`)
-  } else {
-    vm = vm.$mount()
+    document.body.appendChild(vm.$el)
   }
 
   return vm
@@ -69,13 +67,12 @@ describe('vue-howler mixin', function () {
   this.timeout(60000)
 
   it ('should play mp3s', () => {
-    const p = makeTestInstance()
+    const p = makeTestInstance().$refs.player
 
     return Vue.nextTick()
       .then(() => {
         expect(p).to.exist
         expect(p.$data._howl).to.exist
-        expect(p.duration).to.equal(0)
         expect(p.seek).to.equal(0)
         expect(p.playing).to.be.false
       })
