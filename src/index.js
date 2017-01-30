@@ -150,7 +150,14 @@ export default {
       preload: this.preload
     })
 
-    this.duration = this.$data._howl.duration()
+    const duration = this.$data._howl.duration()
+    this.duration = duration
+
+    if (duration > 0) {
+      // The audio file(s) have been cached. Howler won't
+      // emit a load event, so we will do this manually
+      this.$emit('load')
+    }
 
     // Bind to all Howl events
     this.$data._howlEvents = this.$data._howlEvents.map(event => {
