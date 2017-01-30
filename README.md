@@ -1,4 +1,4 @@
-# vue-howler
+# vue-howler [![Version](https://img.shields.io/npm/v/vue-howler.svg)][npm]
 A [Howler.js][howler] [mixin][mixins] for Vue 2 that makes it easy to create custom audio player components
 
 ## Installation
@@ -185,3 +185,4 @@ MIT © [Blocklevel][blocklevel-gh]
 [howler]: https://howlerjs.com/
 [mixins]: https://vuejs.org/v2/guide/mixins.html
 [blocklevel-gh]: https://github.com/blocklevel
+[npm]: https://www.npmjs.com/package/vue-howler
