@@ -83,7 +83,7 @@ describe('vue-howler mixin', function () {
       .then(waitForEvent(p, 'play'))
       .then(wait(500))
       .then(() => {
-        expect(p.duration).to.equal(206.208) // Duration of the 'RetroFuture Clean' mp3
+        expect(Math.round(p.duration)).to.equal(206) // Duration of the 'RetroFuture Clean' mp3
         expect(p.seek).to.be.above(0)
         expect(p.playing).to.be.true
         p.stop()
