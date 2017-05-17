@@ -92,6 +92,12 @@ Type: `Boolean` - Default: `true`
 Whether to start downloading the audio
 file when the component is mounted
 
+#### `html5`
+
+Type: `Boolean` - Default: `false`
+
+Whether to force HTML5 Audio
+
 ### Data
 
 #### `playing`

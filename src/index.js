@@ -36,6 +36,13 @@ export default {
     preload: {
       type: Boolean,
       default: true
+    },
+    /**
+     * Whether to force HTML5 Audio
+     */
+    html5: {
+      type: Boolean,
+      default: false
     }
   },
 
@@ -147,7 +154,8 @@ export default {
       volume: this.volume,
       autoplay: this.autoplay,
       loop: this.loop,
-      preload: this.preload
+      preload: this.preload,
+      html5: this.html5
     })
 
     const duration = this.$data._howl.duration()
