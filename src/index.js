@@ -265,39 +265,51 @@ export default {
     },
     /**
      * Set the volume of the playback
-     * @param {Number} newValue - The new volume.
+     * @param {Number} volume - The new volume.
      * The value is clamped between 0 and 1
      */
-    setVolume (newValue) {
-      if (typeof newValue !== 'number') {
-        throw new Error(`volume must be a number, got a ${typeof newValue} instead`)
+    setVolume (volume) {
+      if (typeof volume !== 'number') {
+        throw new Error(`volume must be a number, got a ${typeof volume} instead`)
       }
 
-      this.$data._howl.volume(clamp(newValue, 0, 1))
+      this.$data._howl.volume(clamp(volume, 0, 1))
     },
     /**
      * Set the rate (speed) of the playback
-     * @param {Number} newValue - The new rate.
+     * @param {Number} rate - The new rate.
      * The value is clamped between 0.5 and 4
      */
-    setRate (newValue) {
-      if (typeof newValue !== 'number') {
-        throw new Error(`rate must be a number, got a ${typeof newValue} instead`)
+    setRate (rate) {
+      if (typeof rate !== 'number') {
+        throw new Error(`rate must be a number, got a ${typeof rate} instead`)
       }
 
-      this.$data._howl.rate(clamp(newValue, 0.5, 4))
+      this.$data._howl.rate(clamp(rate, 0.5, 4))
     },
     /**
      * Set the position of the playback
-     * @param {Number} newValue - The new position in seconds.
+     * @param {Number} seek - The new position in seconds.
      * The value is clamped between 0 and the duration
      */
-    setSeek (newValue) {
-      if (typeof newValue !== 'number') {
-        throw new Error(`seek must be a number, got a ${typeof newValue} instead`)
+    setSeek (seek) {
+      if (typeof seek !== 'number') {
+        throw new Error(`seek must be a number, got a ${typeof seek} instead`)
       }
 
-      this.$data._howl.seek(clamp(newValue, 0, this.duration))
+      this.$data._howl.seek(clamp(seek, 0, this.duration))
+    },
+    /**
+     * Set the progress of the playback
+     * @param {Number} progress - The new progress.
+     * The value is clamped between 0 and 1
+     */
+    setProgress (progress) {
+      if (typeof progress !== 'number') {
+        throw new Error(`progress must be a number, got a ${typeof progress} instead`)
+      }
+
+      this.setSeek(clamp(progress, 0, 1) * this.duration)
     }
   }
 }

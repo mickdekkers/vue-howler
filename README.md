@@ -172,17 +172,21 @@ Unmute the playback
 
 Toggle muting and unmuting the playback
 
-#### `setVolume(newValue)`
+#### `setVolume(volume)`
 
 Set the volume of the playback (value is clamped between `0` and `1`)
 
-#### `setRate(newValue)`
+#### `setRate(rate)`
 
 Set the rate (speed) of the playback (value is clamped between `0.5` and `4`)
 
-#### `setSeek(newValue)`
+#### `setSeek(seek)`
 
 Set the position of the playback (value is clamped between `0` and `duration`)
+
+#### `setProgress(progress)`
+
+Set the progress of the playback (value is clamped between `0` and `1`)
 
 ## License
 
