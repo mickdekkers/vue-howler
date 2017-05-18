@@ -3,14 +3,13 @@
  * (c) 2017 Mick Dekkers
  * Released under the MIT License.
  */
-(function (global, factory) {
-  typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('howler'), require('lodash.clamp'), require('lodash.values')) :
-  typeof define === 'function' && define.amd ? define(['howler', 'lodash.clamp', 'lodash.values'], factory) :
-  (global.VueHowler = factory(global.howler,global.clamp,global.values));
-}(this, (function (howler,clamp,values) { 'use strict';
+'use strict';
 
-clamp = 'default' in clamp ? clamp['default'] : clamp;
-values = 'default' in values ? values['default'] : values;
+function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
+
+var howler = require('howler');
+var clamp = _interopDefault(require('lodash.clamp'));
+var values = _interopDefault(require('lodash.values'));
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
   return typeof obj;
@@ -446,6 +445,4 @@ var index = {
   }
 };
 
-return index;
-
-})));
+module.exports = index;
