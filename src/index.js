@@ -1,5 +1,6 @@
 import { Howl } from 'howler'
 import clamp from 'lodash.clamp'
+import values from 'lodash.values'
 
 export default {
   props: {
@@ -9,8 +10,9 @@ export default {
     sources: {
       type: Array,
       required: true,
-      validator (value) {
-        return value.every(source => typeof source === 'string' && source.length > 0)
+      validator (sources) {
+        // Every source must be a non-empty string
+        return sources.every(source => typeof source === 'string' && source.length > 0)
       }
     },
     /**
@@ -90,7 +92,7 @@ export default {
         }
       },
       /**
-       * A list of howl events to listen to as well as
+       * A list of howl events to listen to and
        * functions to call when they are triggered
        */
       _howlEvents: [
@@ -169,15 +171,18 @@ export default {
 
     // Bind to all Howl events
     this.$data._howlEvents = this.$data._howlEvents.map(event => {
+      // Normalize string shorthands to objects
       if (typeof event === 'string') {
         event = { name: event }
       }
 
+      // Create a handler
       const handler = (id, details) => {
         if (typeof event.hook === 'function') event.hook(id, details)
         this.$emit(event.name, id, details)
       }
 
+      // Bind the handler
       this.$data._howl.on(event.name, handler)
 
       // Return the name and handler to unbind later
@@ -188,26 +193,32 @@ export default {
   beforeDestroy () {
     // Stop all playback
     this.stop()
+
     // Stop all polls
-    Object.values(this.$data._polls).forEach(poll => {
+    values(this.$data._polls).forEach(poll => {
       if (poll.id != null) clearInterval(poll.id)
     })
+
     // Clear all event listeners
     this.$data._howlEvents.forEach(({ name, handler }) => this.$data._howl.off(name, handler))
+
     // Destroy the Howl instance
     this.$data._howl = null
   },
 
   watch: {
-    playing () {
+    playing (playing) {
+      // Update the seek
       this.seek = this.$data._howl.seek()
 
-      if (this.playing) {
+      if (playing) {
+        // Start the seek poll
         this.$data._polls.seek.id = setInterval(
           this.$data._polls.seek.hook,
           this.$data._polls.seek.interval
         )
       } else {
+        // Stop the seek poll
         clearInterval(this.$data._polls.seek.id)
       }
     }
