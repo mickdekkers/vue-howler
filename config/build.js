@@ -6,10 +6,7 @@ var uglify = require('uglify-js')
 var babel = require('rollup-plugin-babel')
 var pack = require('../package.json')
 
-// CommonJS build.
-// this is used as the "main" field in package.json
-// and used by bundlers like Webpack and Browserify.
-rollup.rollup({
+var rollupOptions = {
   entry: 'src/index.js',
   plugins: [
     babel({
@@ -17,56 +14,47 @@ rollup.rollup({
       presets: ['es2015-rollup', 'stage-2']
     })
   ]
-})
-.then(function (bundle) {
-  return write('dist/' + pack.name + '.common.js', bundle.generate({
-    format: 'cjs',
-    banner: banner
-  }).code)
-})
-// Standalone Dev Build
-.then(function () {
-  return rollup.rollup({
-    entry: 'src/index.js',
-    plugins: [
-      babel({
-        babelrc: false,
-        presets: ['es2015-rollup', 'stage-2']
-      })
-    ]
-  })
+}
+
+// CommonJS build.
+// this is used as the "main" field in package.json
+// and used by bundlers like Webpack and Browserify.
+rollup.rollup(rollupOptions)
   .then(function (bundle) {
-    return write('dist/' + pack.name + '.js', bundle.generate({
-      format: 'umd',
-      moduleName: classify(pack.name),
+    return write('dist/' + pack.name + '.common.js', bundle.generate({
+      format: 'cjs',
       banner: banner
     }).code)
   })
-})
-.then(function () {
-  // Standalone Production Build
-  return rollup.rollup({
-    entry: 'src/index.js',
-    plugins: [
-      babel({
-        babelrc: false,
-        presets: ['es2015-rollup', 'stage-2']
+  // Standalone Dev Build
+  .then(function () {
+    return rollup.rollup(rollupOptions)
+      .then(function (bundle) {
+        return write('dist/' + pack.name + '.js', bundle.generate({
+          format: 'umd',
+          moduleName: classify(pack.name),
+          banner: banner
+        }).code)
       })
-    ]
   })
-  .then(function (bundle) {
-    var code = bundle.generate({
-      format: 'umd',
-      moduleName: classify(pack.name)
-    }).code
-    var minified = banner + '\n' + uglify.minify(code, {
-      fromString: true
-    }).code
-    return write('dist/' + pack.name + '.min.js', minified)
+  .then(function () {
+    // Standalone Production Build
+    return rollup.rollup(rollupOptions)
+      .then(function (bundle) {
+        var code = bundle.generate({
+          format: 'umd',
+          moduleName: classify(pack.name)
+        }).code
+
+        var minified = banner + '\n' + uglify.minify(code, {
+          fromString: true
+        }).code
+
+        return write('dist/' + pack.name + '.min.js', minified)
+      })
+      .then(zip)
   })
-  .then(zip)
-})
-.catch(logError)
+  .catch(logError)
 
 function toUpper (_, c) {
   return c ? c.toUpperCase() : ''
