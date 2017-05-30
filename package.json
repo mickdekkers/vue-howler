@@ -91,6 +91,7 @@
   },
   "dependencies": {
     "howler": "^2.0.3",
+    "lodash.assign": "^4.2.0",
     "lodash.clamp": "^4.0.3",
     "lodash.values": "^4.3.0"
   }

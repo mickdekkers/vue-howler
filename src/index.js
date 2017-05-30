@@ -1,6 +1,7 @@
 import { Howl } from 'howler'
 import clamp from 'lodash.clamp'
 import values from 'lodash.values'
+import assign from 'lodash.assign'
 
 export default {
   props: {
@@ -151,59 +152,11 @@ export default {
   },
 
   created () {
-    this.$data._howl = new Howl({
-      src: this.sources,
-      volume: this.volume,
-      autoplay: this.autoplay,
-      loop: this.loop,
-      preload: this.preload,
-      html5: this.html5
-    })
-
-    const duration = this.$data._howl.duration()
-    this.duration = duration
-
-    if (duration > 0) {
-      // The audio file(s) have been cached. Howler won't
-      // emit a load event, so we will do this manually
-      this.$emit('load')
-    }
-
-    // Bind to all Howl events
-    this.$data._howlEvents = this.$data._howlEvents.map(event => {
-      // Normalize string shorthands to objects
-      if (typeof event === 'string') {
-        event = { name: event }
-      }
-
-      // Create a handler
-      const handler = (id, details) => {
-        if (typeof event.hook === 'function') event.hook(id, details)
-        this.$emit(event.name, id, details)
-      }
-
-      // Bind the handler
-      this.$data._howl.on(event.name, handler)
-
-      // Return the name and handler to unbind later
-      return { name: event.name, handler }
-    })
+    this._initialize()
   },
 
   beforeDestroy () {
-    // Stop all playback
-    this.stop()
-
-    // Stop all polls
-    values(this.$data._polls).forEach(poll => {
-      if (poll.id != null) clearInterval(poll.id)
-    })
-
-    // Clear all event listeners
-    this.$data._howlEvents.forEach(({ name, handler }) => this.$data._howl.off(name, handler))
-
-    // Destroy the Howl instance
-    this.$data._howl = null
+    this._cleanup()
   },
 
   watch: {
@@ -221,10 +174,97 @@ export default {
         // Stop the seek poll
         clearInterval(this.$data._polls.seek.id)
       }
+    },
+
+    sources (sources) {
+      this._reinitialize()
     }
   },
 
   methods: {
+    /**
+     * Reinitialize the Howler player
+     */
+    _reinitialize () {
+      this._cleanup()
+      this._initialize()
+    },
+    /**
+     * Initialize the Howler player
+     */
+    _initialize () {
+      this.$data._howl = new Howl({
+        src: this.sources,
+        volume: this.volume,
+        autoplay: this.autoplay,
+        loop: this.loop,
+        preload: this.preload,
+        html5: this.html5
+      })
+
+      const duration = this.$data._howl.duration()
+      this.duration = duration
+
+      if (duration > 0) {
+        // The audio file(s) have been cached. Howler won't
+        // emit a load event, so we will do this manually
+        this.$emit('load')
+      }
+
+      // Bind to all Howl events
+      this.$data._howlEvents = this.$data._howlEvents.map(event => {
+        // Normalize string shorthands to objects
+        if (typeof event === 'string') {
+          event = { name: event }
+        }
+
+        // Create a handler
+        const handler = (id, details) => {
+          if (typeof event.hook === 'function') event.hook(id, details)
+          this.$emit(event.name, id, details)
+        }
+
+        // Bind the handler
+        this.$data._howl.on(event.name, handler)
+
+        // Return the name and handler to unbind later
+        return assign({}, event, { handler })
+      })
+    },
+    /**
+     * Clean up the Howler player
+     */
+    _cleanup () {
+      // Stop all playback
+      this.stop()
+
+      // Stop all polls
+      values(this.$data._polls).forEach(poll => {
+        if (poll.id != null) clearInterval(poll.id)
+      })
+
+      // Clear all event listeners
+      this.$data._howlEvents.map(event => {
+        if (event.handler) {
+          this.$data._howl.off(event.name, event.handler)
+
+          const _event = assign({}, event)
+          delete _event.handler
+          return _event
+        }
+
+        return event
+      })
+
+      // Destroy the Howl instance
+      this.$data._howl = null
+
+      // Reset data
+      this.muted = false
+      this.volume = 1.0
+      this.rate = 1.0
+      this.duration = 0
+    },
     /**
      * Start the playback
      */

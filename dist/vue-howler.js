@@ -4,13 +4,14 @@
  * Released under the MIT License.
  */
 (function (global, factory) {
-  typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('howler'), require('lodash.clamp'), require('lodash.values')) :
-  typeof define === 'function' && define.amd ? define(['howler', 'lodash.clamp', 'lodash.values'], factory) :
-  (global.VueHowler = factory(global.howler,global.clamp,global.values));
-}(this, (function (howler,clamp,values) { 'use strict';
+  typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('howler'), require('lodash.clamp'), require('lodash.values'), require('lodash.assign')) :
+  typeof define === 'function' && define.amd ? define(['howler', 'lodash.clamp', 'lodash.values', 'lodash.assign'], factory) :
+  (global.VueHowler = factory(global.howler,global.clamp,global.values,global.assign));
+}(this, (function (howler,clamp,values,assign) { 'use strict';
 
 clamp = 'default' in clamp ? clamp['default'] : clamp;
 values = 'default' in values ? values['default'] : values;
+assign = 'default' in assign ? assign['default'] : assign;
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
   return typeof obj;
@@ -257,66 +258,10 @@ var index = {
   },
 
   created: function created() {
-    var _this2 = this;
-
-    this.$data._howl = new howler.Howl({
-      src: this.sources,
-      volume: this.volume,
-      autoplay: this.autoplay,
-      loop: this.loop,
-      preload: this.preload,
-      html5: this.html5
-    });
-
-    var duration = this.$data._howl.duration();
-    this.duration = duration;
-
-    if (duration > 0) {
-      // The audio file(s) have been cached. Howler won't
-      // emit a load event, so we will do this manually
-      this.$emit('load');
-    }
-
-    // Bind to all Howl events
-    this.$data._howlEvents = this.$data._howlEvents.map(function (event) {
-      // Normalize string shorthands to objects
-      if (typeof event === 'string') {
-        event = { name: event };
-      }
-
-      // Create a handler
-      var handler = function handler(id, details) {
-        if (typeof event.hook === 'function') event.hook(id, details);
-        _this2.$emit(event.name, id, details);
-      };
-
-      // Bind the handler
-      _this2.$data._howl.on(event.name, handler);
-
-      // Return the name and handler to unbind later
-      return { name: event.name, handler: handler };
-    });
+    this._initialize();
   },
   beforeDestroy: function beforeDestroy() {
-    var _this3 = this;
-
-    // Stop all playback
-    this.stop();
-
-    // Stop all polls
-    values(this.$data._polls).forEach(function (poll) {
-      if (poll.id != null) clearInterval(poll.id);
-    });
-
-    // Clear all event listeners
-    this.$data._howlEvents.forEach(function (_ref) {
-      var name = _ref.name,
-          handler = _ref.handler;
-      return _this3.$data._howl.off(name, handler);
-    });
-
-    // Destroy the Howl instance
-    this.$data._howl = null;
+    this._cleanup();
   },
 
 
@@ -332,10 +277,103 @@ var index = {
         // Stop the seek poll
         clearInterval(this.$data._polls.seek.id);
       }
+    },
+    sources: function sources(_sources) {
+      this._reinitialize();
     }
   },
 
   methods: {
+    /**
+     * Reinitialize the Howler player
+     */
+    _reinitialize: function _reinitialize() {
+      this._cleanup();
+      this._initialize();
+    },
+
+    /**
+     * Initialize the Howler player
+     */
+    _initialize: function _initialize() {
+      var _this2 = this;
+
+      this.$data._howl = new howler.Howl({
+        src: this.sources,
+        volume: this.volume,
+        autoplay: this.autoplay,
+        loop: this.loop,
+        preload: this.preload,
+        html5: this.html5
+      });
+
+      var duration = this.$data._howl.duration();
+      this.duration = duration;
+
+      if (duration > 0) {
+        // The audio file(s) have been cached. Howler won't
+        // emit a load event, so we will do this manually
+        this.$emit('load');
+      }
+
+      // Bind to all Howl events
+      this.$data._howlEvents = this.$data._howlEvents.map(function (event) {
+        // Normalize string shorthands to objects
+        if (typeof event === 'string') {
+          event = { name: event };
+        }
+
+        // Create a handler
+        var handler = function handler(id, details) {
+          if (typeof event.hook === 'function') event.hook(id, details);
+          _this2.$emit(event.name, id, details);
+        };
+
+        // Bind the handler
+        _this2.$data._howl.on(event.name, handler);
+
+        // Return the name and handler to unbind later
+        return assign({}, event, { handler: handler });
+      });
+    },
+
+    /**
+     * Clean up the Howler player
+     */
+    _cleanup: function _cleanup() {
+      var _this3 = this;
+
+      // Stop all playback
+      this.stop();
+
+      // Stop all polls
+      values(this.$data._polls).forEach(function (poll) {
+        if (poll.id != null) clearInterval(poll.id);
+      });
+
+      // Clear all event listeners
+      this.$data._howlEvents.map(function (event) {
+        if (event.handler) {
+          _this3.$data._howl.off(event.name, event.handler);
+
+          var _event = assign({}, event);
+          delete _event.handler;
+          return _event;
+        }
+
+        return event;
+      });
+
+      // Destroy the Howl instance
+      this.$data._howl = null;
+
+      // Reset data
+      this.muted = false;
+      this.volume = 1.0;
+      this.rate = 1.0;
+      this.duration = 0;
+    },
+
     /**
      * Start the playback
      */
