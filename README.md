@@ -41,7 +41,10 @@ Then you can use that component in your templates
   import AudioPlayer from './audio-player.vue'
 
   export default {
-    components: [AudioPlayer],
+    components: {
+      AudioPlayer
+    },
+
     data () {
       return {
         audioSources: [
