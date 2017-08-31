@@ -1,5 +1,5 @@
 /*!
- * vue-howler v0.3.2
+ * vue-howler v0.3.3
  * (c) 2017 Mick Dekkers
  * Released under the MIT License.
  */
@@ -288,7 +288,7 @@ var index = {
      * Reinitialize the Howler player
      */
     _reinitialize: function _reinitialize() {
-      this._cleanup();
+      this._cleanup(false);
       this._initialize();
     },
 
@@ -301,6 +301,8 @@ var index = {
       this.$data._howl = new howler.Howl({
         src: this.sources,
         volume: this.volume,
+        rate: this.rate,
+        mute: this.muted,
         autoplay: this.autoplay,
         loop: this.loop,
         preload: this.preload,
@@ -343,6 +345,8 @@ var index = {
     _cleanup: function _cleanup() {
       var _this3 = this;
 
+      var resetSettings = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
+
       // Stop all playback
       this.stop();
 
@@ -367,11 +371,13 @@ var index = {
       // Destroy the Howl instance
       this.$data._howl = null;
 
-      // Reset data
-      this.muted = false;
-      this.volume = 1.0;
-      this.rate = 1.0;
       this.duration = 0;
+
+      if (resetSettings) {
+        this.muted = false;
+        this.volume = 1.0;
+        this.rate = 1.0;
+      }
     },
 
     /**
