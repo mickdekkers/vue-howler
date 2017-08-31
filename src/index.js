@@ -186,7 +186,7 @@ export default {
      * Reinitialize the Howler player
      */
     _reinitialize () {
-      this._cleanup()
+      this._cleanup(false)
       this._initialize()
     },
     /**
@@ -196,6 +196,8 @@ export default {
       this.$data._howl = new Howl({
         src: this.sources,
         volume: this.volume,
+        rate: this.rate,
+        mute: this.muted,
         autoplay: this.autoplay,
         loop: this.loop,
         preload: this.preload,
@@ -234,7 +236,7 @@ export default {
     /**
      * Clean up the Howler player
      */
-    _cleanup () {
+    _cleanup (resetSettings = true) {
       // Stop all playback
       this.stop()
 
@@ -259,11 +261,13 @@ export default {
       // Destroy the Howl instance
       this.$data._howl = null
 
-      // Reset data
-      this.muted = false
-      this.volume = 1.0
-      this.rate = 1.0
       this.duration = 0
+
+      if (resetSettings) {
+        this.muted = false
+        this.volume = 1.0
+        this.rate = 1.0
+      }
     },
     /**
      * Start the playback
