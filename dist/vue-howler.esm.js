@@ -1,11 +1,7 @@
-'use strict';
-
-function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
-
-var howler = require('howler');
-var clamp = _interopDefault(require('lodash.clamp'));
-var values = _interopDefault(require('lodash.values'));
-var assign = _interopDefault(require('lodash.assign'));
+import { Howl } from 'howler';
+import clamp from 'lodash.clamp';
+import values from 'lodash.values';
+import assign from 'lodash.assign';
 
 var babelHelpers = {};
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
@@ -379,7 +375,7 @@ var index = {
     _initialize: function _initialize() {
       var _this2 = this;
 
-      this.$data._howl = new howler.Howl({
+      this.$data._howl = new Howl({
         src: this.sources,
         volume: this.volume,
         rate: this.rate,
@@ -571,4 +567,4 @@ var index = {
   }
 };
 
-module.exports = index;
+export default index;
