@@ -5,6 +5,8 @@ const pascalCase = require('pascal-case')
 const rollup = require('rollup')
 const babel = require('rollup-plugin-babel')
 const packageName = require('../package.json').name
+const minify = require('uglify-es').minify
+const uglify = require('rollup-plugin-uglify')
 
 const getDataSize = code => {
   return `${(code.length / 1024).toFixed(2)}kb`
@@ -31,16 +33,18 @@ const writeCodeMap = async (dest, code, map) => {
   ])
 }
 
+const rollupInputConfig = {
+  input: path.resolve(__dirname, '../src/index.js'),
+  plugins: [
+    babel({
+      exclude: 'node_modules/**',
+      externalHelpersWhitelist: ['typeof']
+    })
+  ]
+}
+
 const build = async () => {
-  const bundle = await rollup.rollup({
-    input: path.resolve(__dirname, '../src/index.js'),
-    plugins: [
-      babel({
-        exclude: 'node_modules/**',
-        externalHelpersWhitelist: ['typeof']
-      })
-    ]
-  })
+  const bundle = await rollup.rollup(rollupInputConfig)
 
   /**
    * CommonJS build
@@ -72,6 +76,10 @@ const build = async () => {
    * UMD build
    */
   {
+    rollupInputConfig.plugins.push(uglify({}, minify))
+
+    const bundle = await rollup.rollup(rollupInputConfig)
+
     const { code, map } = await bundle.generate({
       format: 'umd',
       sourcemap: true,
