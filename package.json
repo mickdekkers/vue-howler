@@ -27,7 +27,8 @@
     "dist",
     "yarn.lock"
   ],
-  "main": "dist/vue-howler.js",
+  "main": "dist/vue-howler.common.js",
+  "module": "dist/vue-howler.esm.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Blocklevel/vue-howler.git"
