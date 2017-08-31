@@ -37,8 +37,7 @@ const build = async () => {
     plugins: [
       babel({
         exclude: 'node_modules/**',
-        // Uncomment this to cause error
-        // externalHelpersWhitelist: ['_typeof']
+        externalHelpersWhitelist: ['typeof']
       })
     ]
   })
