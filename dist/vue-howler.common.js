@@ -1,3 +1,8 @@
+/*
+ * vue-howler v0.3.3
+ * (c) 2017 Mick Dekkers
+ * Released under the MIT License.
+ */
 'use strict';
 
 function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }

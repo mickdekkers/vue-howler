@@ -1,3 +1,8 @@
+/*
+ * vue-howler v0.3.3
+ * (c) 2017 Mick Dekkers
+ * Released under the MIT License.
+ */
 import { Howl } from 'howler';
 import clamp from 'lodash.clamp';
 import values from 'lodash.values';

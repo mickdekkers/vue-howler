@@ -4,9 +4,10 @@ const chalk = require('chalk')
 const pascalCase = require('pascal-case')
 const rollup = require('rollup')
 const babel = require('rollup-plugin-babel')
-const packageName = require('../package.json').name
 const minify = require('uglify-es').minify
 const uglify = require('rollup-plugin-uglify')
+const banner = require('./banner')
+const pack = require('../package.json')
 
 const getDataSize = code => {
   return `${(code.length / 1024).toFixed(2)}kb`
@@ -53,10 +54,11 @@ const build = async () => {
     const { code, map } = await bundle.generate({
       format: 'cjs',
       sourcemap: true,
-      sourcemapFile: `${packageName}.common.js`
+      sourcemapFile: `${pack.name}.common.js`,
+      banner
     })
 
-    writeCodeMap(`../dist/${packageName}.common.js`, code, map)
+    writeCodeMap(`../dist/${pack.name}.common.js`, code, map)
   }
 
   /**
@@ -66,28 +68,38 @@ const build = async () => {
     const { code, map } = await bundle.generate({
       format: 'es',
       sourcemap: true,
-      sourcemapFile: `${packageName}.esm.js`
+      sourcemapFile: `${pack.name}.esm.js`,
+      banner
     })
 
-    writeCodeMap(`../dist/${packageName}.esm.js`, code, map)
+    writeCodeMap(`../dist/${pack.name}.esm.js`, code, map)
   }
 
   /**
    * UMD build
    */
   {
-    rollupInputConfig.plugins.push(uglify({}, minify))
+    const bannerRegex = new RegExp(`${pack.name} v${pack.version}`)
+    rollupInputConfig.plugins.push(uglify({
+      output: {
+        // Preserve only the banner comment
+        comments (node, { value: text, type }) {
+          return (type === 'comment2') && bannerRegex.test(text)
+        }
+      }
+    }, minify))
 
     const bundle = await rollup.rollup(rollupInputConfig)
 
     const { code, map } = await bundle.generate({
       format: 'umd',
       sourcemap: true,
-      sourcemapFile: `${packageName}.umd.js`,
-      name: pascalCase(packageName)
+      sourcemapFile: `${pack.name}.umd.js`,
+      name: pascalCase(pack.name),
+      banner
     })
 
-    writeCodeMap(`../dist/${packageName}.umd.js`, code, map)
+    writeCodeMap(`../dist/${pack.name}.umd.js`, code, map)
   }
 }
 
