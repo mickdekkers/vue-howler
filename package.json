@@ -42,6 +42,7 @@
     "test": "karma start ./test/karma.config.js --singleRun",
     "test:watch": "karma start ./test/karma.config.js"
   },
+  "browser": "dist/vue-howler.iife.js",
   "dependencies": {
     "howler": "^2.0.4",
     "math-clamp": "^1.0.0",
