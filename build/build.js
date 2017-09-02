@@ -90,14 +90,19 @@ const build = async () => {
    */
   {
     const bannerRegex = new RegExp(`${pkg.name} v${pkg.version}`)
-    rollupInputConfig.plugins.push(uglify({
-      output: {
-        // Preserve only the banner comment
-        comments (node, { value: text, type }) {
-          return (type === 'comment2') && bannerRegex.test(text)
-        }
-      }
-    }, minify))
+    rollupInputConfig.plugins.push(
+      uglify(
+        {
+          output: {
+            // Preserve only the banner comment
+            comments(node, { value: text, type }) {
+              return type === 'comment2' && bannerRegex.test(text)
+            }
+          }
+        },
+        minify
+      )
+    )
 
     const bundle = await rollup.rollup(rollupInputConfig)
 
