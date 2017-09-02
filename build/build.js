@@ -1,6 +1,7 @@
 const fs = require('fs')
 const path = require('path')
 const chalk = require('chalk')
+const dedent = require('dedent')
 const pascalCase = require('pascal-case')
 const rollup = require('rollup')
 const sourcemaps = require('rollup-plugin-sourcemaps')
@@ -85,7 +86,7 @@ const build = async () => {
   }
 
   /**
-   * UMD build
+   * IIFE build
    */
   {
     const bannerRegex = new RegExp(`${pkg.name} v${pkg.version}`)
@@ -101,14 +102,24 @@ const build = async () => {
     const bundle = await rollup.rollup(rollupInputConfig)
 
     const { code, map } = await bundle.generate({
-      format: 'umd',
+      format: 'iife',
       sourcemap: true,
-      sourcemapFile: `${pkg.name}.umd.js`,
+      sourcemapFile: `${pkg.name}.iife.js`,
       name: pascalCase(pkg.name),
-      banner
+      banner,
+      // This is a bit of a hack to work around
+      // the fact that howler's iife build exposes
+      // Howl directly on the window object.
+      globals: {
+        howler: 'Howl'
+      },
+      intro: dedent`
+        // Ensure howler.Howl refers to window.Howl
+        howler = { Howl: howler };
+      `
     })
 
-    writeCodeMap(`../dist/${pkg.name}.umd.js`, code, map)
+    writeCodeMap(`../dist/${pkg.name}.iife.js`, code, map)
   }
 }
 
