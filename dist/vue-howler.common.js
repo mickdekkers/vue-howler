@@ -5,12 +5,8 @@
  */
 'use strict';
 
-function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
-
 var howler = require('howler');
-var clamp = _interopDefault(require('lodash.clamp'));
-var values = _interopDefault(require('lodash.values'));
-var assign = _interopDefault(require('lodash.assign'));
+var lodash = require('lodash');
 
 var babelHelpers = {};
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
@@ -253,7 +249,7 @@ var index = {
         _this2.$data._howl.on(event.name, handler);
 
         // Return the name and handler to unbind later
-        return assign({}, event, { handler: handler });
+        return lodash.assign({}, event, { handler: handler });
       });
     },
 
@@ -269,7 +265,7 @@ var index = {
       this.stop();
 
       // Stop all polls
-      values(this.$data._polls).forEach(function (poll) {
+      lodash.values(this.$data._polls).forEach(function (poll) {
         if (poll.id != null) clearInterval(poll.id);
       });
 
@@ -278,7 +274,7 @@ var index = {
         if (event.handler) {
           _this3.$data._howl.off(event.name, event.handler);
 
-          var _event = assign({}, event);
+          var _event = lodash.assign({}, event);
           delete _event.handler;
           return _event;
         }
@@ -364,7 +360,7 @@ var index = {
         throw new Error('volume must be a number, got a ' + (typeof volume === 'undefined' ? 'undefined' : _typeof(volume)) + ' instead');
       }
 
-      this.$data._howl.volume(clamp(volume, 0, 1));
+      this.$data._howl.volume(lodash.clamp(volume, 0, 1));
     },
 
     /**
@@ -377,7 +373,7 @@ var index = {
         throw new Error('rate must be a number, got a ' + (typeof rate === 'undefined' ? 'undefined' : _typeof(rate)) + ' instead');
       }
 
-      this.$data._howl.rate(clamp(rate, 0.5, 4));
+      this.$data._howl.rate(lodash.clamp(rate, 0.5, 4));
     },
 
     /**
@@ -390,7 +386,7 @@ var index = {
         throw new Error('seek must be a number, got a ' + (typeof seek === 'undefined' ? 'undefined' : _typeof(seek)) + ' instead');
       }
 
-      this.$data._howl.seek(clamp(seek, 0, this.duration));
+      this.$data._howl.seek(lodash.clamp(seek, 0, this.duration));
     },
 
     /**
@@ -403,7 +399,7 @@ var index = {
         throw new Error('progress must be a number, got a ' + (typeof progress === 'undefined' ? 'undefined' : _typeof(progress)) + ' instead');
       }
 
-      this.setSeek(clamp(progress, 0, 1) * this.duration);
+      this.setSeek(lodash.clamp(progress, 0, 1) * this.duration);
     }
   }
 };

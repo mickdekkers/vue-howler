@@ -4,9 +4,7 @@
  * Released under the MIT License.
  */
 import { Howl } from 'howler';
-import clamp from 'lodash.clamp';
-import values from 'lodash.values';
-import assign from 'lodash.assign';
+import { assign, clamp, values } from 'lodash';
 
 var babelHelpers = {};
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
