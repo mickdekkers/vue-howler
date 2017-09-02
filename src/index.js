@@ -1,5 +1,7 @@
 import { Howl } from 'howler'
-import { clamp, values, assign } from 'lodash'
+import clamp from 'math-clamp'
+import values from 'object-values'
+import assign from 'object-assign'
 
 export default {
   props: {

@@ -4,6 +4,8 @@ const chalk = require('chalk')
 const pascalCase = require('pascal-case')
 const rollup = require('rollup')
 const sourcemaps = require('rollup-plugin-sourcemaps')
+const nodeResolve = require('rollup-plugin-node-resolve')
+const commonjs = require('rollup-plugin-commonjs')
 const babel = require('rollup-plugin-babel')
 const minify = require('uglify-es').minify
 const uglify = require('rollup-plugin-uglify')
@@ -39,12 +41,16 @@ const rollupInputConfig = {
   input: path.resolve(__dirname, '../src/index.js'),
   plugins: [
     sourcemaps(),
+    nodeResolve({
+      jsnext: true
+    }),
+    commonjs(),
     babel({
       exclude: 'node_modules/**',
       externalHelpersWhitelist: ['typeof']
     })
   ],
-  external: Object.keys(pkg.dependencies || {})
+  external: ['howler']
 }
 
 const build = async () => {

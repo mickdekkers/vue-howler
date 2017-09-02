@@ -6,7 +6,118 @@
 'use strict';
 
 var howler = require('howler');
-var lodash = require('lodash');
+
+'use strict';
+var mathClamp$1 = function (x, min, max) {
+	if (min > max) {
+		throw new RangeError('`min` should be lower than `max`');
+	}
+
+	return x < min ? min : x > max ? max : x;
+};
+
+'use strict';
+var objectValues = function (obj) {
+	var keys = Object.keys(obj);
+	var ret = [];
+
+	for (var i = 0; i < keys.length; i++) {
+		ret.push(obj[keys[i]]);
+	}
+
+	return ret;
+};
+
+/*
+object-assign
+(c) Sindre Sorhus
+@license MIT
+*/
+
+'use strict';
+/* eslint-disable no-unused-vars */
+var getOwnPropertySymbols = Object.getOwnPropertySymbols;
+var hasOwnProperty = Object.prototype.hasOwnProperty;
+var propIsEnumerable = Object.prototype.propertyIsEnumerable;
+
+function toObject(val) {
+	if (val === null || val === undefined) {
+		throw new TypeError('Object.assign cannot be called with null or undefined');
+	}
+
+	return Object(val);
+}
+
+function shouldUseNative() {
+	try {
+		if (!Object.assign) {
+			return false;
+		}
+
+		// Detect buggy property enumeration order in older V8 versions.
+
+		// https://bugs.chromium.org/p/v8/issues/detail?id=4118
+		var test1 = new String('abc');  // eslint-disable-line no-new-wrappers
+		test1[5] = 'de';
+		if (Object.getOwnPropertyNames(test1)[0] === '5') {
+			return false;
+		}
+
+		// https://bugs.chromium.org/p/v8/issues/detail?id=3056
+		var test2 = {};
+		for (var i = 0; i < 10; i++) {
+			test2['_' + String.fromCharCode(i)] = i;
+		}
+		var order2 = Object.getOwnPropertyNames(test2).map(function (n) {
+			return test2[n];
+		});
+		if (order2.join('') !== '0123456789') {
+			return false;
+		}
+
+		// https://bugs.chromium.org/p/v8/issues/detail?id=3056
+		var test3 = {};
+		'abcdefghijklmnopqrst'.split('').forEach(function (letter) {
+			test3[letter] = letter;
+		});
+		if (Object.keys(Object.assign({}, test3)).join('') !==
+				'abcdefghijklmnopqrst') {
+			return false;
+		}
+
+		return true;
+	} catch (err) {
+		// We don't expect any of the above to throw, but better to be safe.
+		return false;
+	}
+}
+
+var objectAssign$1 = shouldUseNative() ? Object.assign : function (target, source) {
+	var from;
+	var to = toObject(target);
+	var symbols;
+
+	for (var s = 1; s < arguments.length; s++) {
+		from = Object(arguments[s]);
+
+		for (var key in from) {
+			if (hasOwnProperty.call(from, key)) {
+				to[key] = from[key];
+			}
+		}
+
+		if (getOwnPropertySymbols) {
+			symbols = getOwnPropertySymbols(from);
+			for (var i = 0; i < symbols.length; i++) {
+				if (propIsEnumerable.call(from, symbols[i])) {
+					to[symbols[i]] = from[symbols[i]];
+				}
+			}
+		}
+	}
+
+	return to;
+};
 
 var babelHelpers = {};
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
@@ -249,7 +360,7 @@ var index = {
         _this2.$data._howl.on(event.name, handler);
 
         // Return the name and handler to unbind later
-        return lodash.assign({}, event, { handler: handler });
+        return objectAssign$1({}, event, { handler: handler });
       });
     },
 
@@ -265,7 +376,7 @@ var index = {
       this.stop();
 
       // Stop all polls
-      lodash.values(this.$data._polls).forEach(function (poll) {
+      objectValues(this.$data._polls).forEach(function (poll) {
         if (poll.id != null) clearInterval(poll.id);
       });
 
@@ -274,7 +385,7 @@ var index = {
         if (event.handler) {
           _this3.$data._howl.off(event.name, event.handler);
 
-          var _event = lodash.assign({}, event);
+          var _event = objectAssign$1({}, event);
           delete _event.handler;
           return _event;
         }
@@ -360,7 +471,7 @@ var index = {
         throw new Error('volume must be a number, got a ' + (typeof volume === 'undefined' ? 'undefined' : _typeof(volume)) + ' instead');
       }
 
-      this.$data._howl.volume(lodash.clamp(volume, 0, 1));
+      this.$data._howl.volume(mathClamp$1(volume, 0, 1));
     },
 
     /**
@@ -373,7 +484,7 @@ var index = {
         throw new Error('rate must be a number, got a ' + (typeof rate === 'undefined' ? 'undefined' : _typeof(rate)) + ' instead');
       }
 
-      this.$data._howl.rate(lodash.clamp(rate, 0.5, 4));
+      this.$data._howl.rate(mathClamp$1(rate, 0.5, 4));
     },
 
     /**
@@ -386,7 +497,7 @@ var index = {
         throw new Error('seek must be a number, got a ' + (typeof seek === 'undefined' ? 'undefined' : _typeof(seek)) + ' instead');
       }
 
-      this.$data._howl.seek(lodash.clamp(seek, 0, this.duration));
+      this.$data._howl.seek(mathClamp$1(seek, 0, this.duration));
     },
 
     /**
@@ -399,7 +510,7 @@ var index = {
         throw new Error('progress must be a number, got a ' + (typeof progress === 'undefined' ? 'undefined' : _typeof(progress)) + ' instead');
       }
 
-      this.setSeek(lodash.clamp(progress, 0, 1) * this.duration);
+      this.setSeek(mathClamp$1(progress, 0, 1) * this.duration);
     }
   }
 };
