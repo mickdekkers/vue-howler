@@ -3,6 +3,7 @@ const path = require('path')
 const chalk = require('chalk')
 const pascalCase = require('pascal-case')
 const rollup = require('rollup')
+const sourcemaps = require('rollup-plugin-sourcemaps')
 const babel = require('rollup-plugin-babel')
 const minify = require('uglify-es').minify
 const uglify = require('rollup-plugin-uglify')
@@ -37,6 +38,7 @@ const writeCodeMap = async (dest, code, map) => {
 const rollupInputConfig = {
   input: path.resolve(__dirname, '../src/index.js'),
   plugins: [
+    sourcemaps(),
     babel({
       exclude: 'node_modules/**',
       externalHelpersWhitelist: ['typeof']
