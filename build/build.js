@@ -7,7 +7,7 @@ const babel = require('rollup-plugin-babel')
 const minify = require('uglify-es').minify
 const uglify = require('rollup-plugin-uglify')
 const banner = require('./banner')
-const pack = require('../package.json')
+const pkg = require('../package.json')
 
 const getDataSize = code => {
   return `${(code.length / 1024).toFixed(2)}kb`
@@ -41,7 +41,8 @@ const rollupInputConfig = {
       exclude: 'node_modules/**',
       externalHelpersWhitelist: ['typeof']
     })
-  ]
+  ],
+  external: Object.keys(pkg.dependencies || {})
 }
 
 const build = async () => {
@@ -54,11 +55,11 @@ const build = async () => {
     const { code, map } = await bundle.generate({
       format: 'cjs',
       sourcemap: true,
-      sourcemapFile: `${pack.name}.common.js`,
+      sourcemapFile: `${pkg.name}.common.js`,
       banner
     })
 
-    writeCodeMap(`../dist/${pack.name}.common.js`, code, map)
+    writeCodeMap(`../dist/${pkg.name}.common.js`, code, map)
   }
 
   /**
@@ -68,18 +69,18 @@ const build = async () => {
     const { code, map } = await bundle.generate({
       format: 'es',
       sourcemap: true,
-      sourcemapFile: `${pack.name}.esm.js`,
+      sourcemapFile: `${pkg.name}.esm.js`,
       banner
     })
 
-    writeCodeMap(`../dist/${pack.name}.esm.js`, code, map)
+    writeCodeMap(`../dist/${pkg.name}.esm.js`, code, map)
   }
 
   /**
    * UMD build
    */
   {
-    const bannerRegex = new RegExp(`${pack.name} v${pack.version}`)
+    const bannerRegex = new RegExp(`${pkg.name} v${pkg.version}`)
     rollupInputConfig.plugins.push(uglify({
       output: {
         // Preserve only the banner comment
@@ -94,12 +95,12 @@ const build = async () => {
     const { code, map } = await bundle.generate({
       format: 'umd',
       sourcemap: true,
-      sourcemapFile: `${pack.name}.umd.js`,
-      name: pascalCase(pack.name),
+      sourcemapFile: `${pkg.name}.umd.js`,
+      name: pascalCase(pkg.name),
       banner
     })
 
-    writeCodeMap(`../dist/${pack.name}.umd.js`, code, map)
+    writeCodeMap(`../dist/${pkg.name}.umd.js`, code, map)
   }
 }
 
