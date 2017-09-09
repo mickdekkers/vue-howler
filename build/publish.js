@@ -96,7 +96,7 @@ const tasks = new Listr([
           task: () =>
             execa(
               'git',
-              ['add', 'dist/*', 'package.json', 'yarn.lock'],
+              ['add', '"dist/*"', 'package.json', 'yarn.lock'],
               execaOpts
             )
         },
