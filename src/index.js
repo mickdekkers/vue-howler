@@ -1,7 +1,7 @@
 import { Howl } from 'howler'
-import clamp from 'lodash.clamp'
-import values from 'lodash.values'
-import assign from 'lodash.assign'
+import clamp from 'math-clamp'
+import values from 'object-values'
+import assign from 'object-assign'
 
 export default {
   props: {
@@ -11,9 +11,11 @@ export default {
     sources: {
       type: Array,
       required: true,
-      validator (sources) {
+      validator(sources) {
         // Every source must be a non-empty string
-        return sources.every(source => typeof source === 'string' && source.length > 0)
+        return sources.every(
+          source => typeof source === 'string' && source.length > 0
+        )
       }
     },
     /**
@@ -49,7 +51,7 @@ export default {
     }
   },
 
-  data () {
+  data() {
     return {
       /**
        * The Howl instance used for playback
@@ -99,20 +101,28 @@ export default {
       _howlEvents: [
         {
           name: 'load',
-          hook: () => { this.duration = this.$data._howl.duration() }
+          hook: () => {
+            this.duration = this.$data._howl.duration()
+          }
         },
         'loaderror',
         {
           name: 'play',
-          hook: () => { this.playing = true }
+          hook: () => {
+            this.playing = true
+          }
         },
         {
           name: 'end',
-          hook: () => { this.playing = false }
+          hook: () => {
+            this.playing = false
+          }
         },
         {
           name: 'pause',
-          hook: () => { this.playing = false }
+          hook: () => {
+            this.playing = false
+          }
         },
         {
           name: 'stop',
@@ -126,15 +136,21 @@ export default {
         'mute',
         {
           name: 'volume',
-          hook: () => { this.volume = this.$data._howl.volume() }
+          hook: () => {
+            this.volume = this.$data._howl.volume()
+          }
         },
         {
           name: 'rate',
-          hook: () => { this.rate = this.$data._howl.rate() }
+          hook: () => {
+            this.rate = this.$data._howl.rate()
+          }
         },
         {
           name: 'seek',
-          hook: () => { this.seek = this.$data._howl.seek() }
+          hook: () => {
+            this.seek = this.$data._howl.seek()
+          }
         },
         'fade'
       ]
@@ -145,22 +161,22 @@ export default {
     /**
      * The progress of the playback on a scale of 0 to 1
      */
-    progress () {
+    progress() {
       if (this.duration === 0) return 0
-      return (this.seek / this.duration)
+      return this.seek / this.duration
     }
   },
 
-  created () {
+  created() {
     this._initialize()
   },
 
-  beforeDestroy () {
+  beforeDestroy() {
     this._cleanup()
   },
 
   watch: {
-    playing (playing) {
+    playing(playing) {
       // Update the seek
       this.seek = this.$data._howl.seek()
 
@@ -176,7 +192,7 @@ export default {
       }
     },
 
-    sources (sources) {
+    sources(sources) {
       this._reinitialize()
     }
   },
@@ -185,14 +201,14 @@ export default {
     /**
      * Reinitialize the Howler player
      */
-    _reinitialize () {
+    _reinitialize() {
       this._cleanup(false)
       this._initialize()
     },
     /**
      * Initialize the Howler player
      */
-    _initialize () {
+    _initialize() {
       this.$data._howl = new Howl({
         src: this.sources,
         volume: this.volume,
@@ -236,7 +252,7 @@ export default {
     /**
      * Clean up the Howler player
      */
-    _cleanup (resetSettings = true) {
+    _cleanup(resetSettings = true) {
       // Stop all playback
       this.stop()
 
@@ -272,19 +288,19 @@ export default {
     /**
      * Start the playback
      */
-    play () {
+    play() {
       if (!this.playing) this.$data._howl.play()
     },
     /**
      * Pause the playback
      */
-    pause () {
+    pause() {
       if (this.playing) this.$data._howl.pause()
     },
     /**
      * Toggle playing or pausing the playback
      */
-    togglePlayback () {
+    togglePlayback() {
       if (!this.playing) {
         this.$data._howl.play()
       } else {
@@ -294,27 +310,27 @@ export default {
     /**
      * Stop the playback (also resets the seek to 0)
      */
-    stop () {
+    stop() {
       this.$data._howl.stop()
     },
     /**
      * Mute the playback
      */
-    mute () {
+    mute() {
       this.$data._howl.mute(true)
       this.muted = true
     },
     /**
      * Unmute the playback
      */
-    unmute () {
+    unmute() {
       this.$data._howl.mute(false)
       this.muted = false
     },
     /**
      * Toggle muting and unmuting the playback
      */
-    toggleMute () {
+    toggleMute() {
       this.$data._howl.mute(!this.muted)
       this.muted = !this.muted
     },
@@ -323,9 +339,11 @@ export default {
      * @param {Number} volume - The new volume.
      * The value is clamped between 0 and 1
      */
-    setVolume (volume) {
+    setVolume(volume) {
       if (typeof volume !== 'number') {
-        throw new Error(`volume must be a number, got a ${typeof volume} instead`)
+        throw new Error(
+          `volume must be a number, got a ${typeof volume} instead`
+        )
       }
 
       this.$data._howl.volume(clamp(volume, 0, 1))
@@ -335,7 +353,7 @@ export default {
      * @param {Number} rate - The new rate.
      * The value is clamped between 0.5 and 4
      */
-    setRate (rate) {
+    setRate(rate) {
       if (typeof rate !== 'number') {
         throw new Error(`rate must be a number, got a ${typeof rate} instead`)
       }
@@ -347,7 +365,7 @@ export default {
      * @param {Number} seek - The new position in seconds.
      * The value is clamped between 0 and the duration
      */
-    setSeek (seek) {
+    setSeek(seek) {
       if (typeof seek !== 'number') {
         throw new Error(`seek must be a number, got a ${typeof seek} instead`)
       }
@@ -359,9 +377,11 @@ export default {
      * @param {Number} progress - The new progress.
      * The value is clamped between 0 and 1
      */
-    setProgress (progress) {
+    setProgress(progress) {
       if (typeof progress !== 'number') {
-        throw new Error(`progress must be a number, got a ${typeof progress} instead`)
+        throw new Error(
+          `progress must be a number, got a ${typeof progress} instead`
+        )
       }
 
       this.setSeek(clamp(progress, 0, 1) * this.duration)
