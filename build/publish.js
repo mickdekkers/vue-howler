@@ -5,6 +5,7 @@ const semver = require('semver')
 const Listr = require('listr')
 const execa = require('execa')
 
+const allowedBranch = 'master'
 const pkgFile = path.join(__dirname, '../package.json')
 
 const log = console.log
@@ -80,15 +81,15 @@ const execaOpts = {
 
 const tasks = new Listr([
   {
-    title: 'Increment package.json version',
+    title: 'Increment version',
     task: ctx => setPkgVersion(ctx.version)
   },
   {
-    title: 'Run build script',
+    title: 'Run build',
     task: () => execa('npm', ['run', '--silent', 'build'], execaOpts)
   },
   {
-    title: 'Git',
+    title: 'Commit build',
     task: () =>
       new Listr([
         {
@@ -105,18 +106,40 @@ const tasks = new Listr([
           task: ctx =>
             execa('git', ['commit', '-m', `v${ctx.version}`], execaOpts)
         },
-        // TODO: push commit
         {
           title: 'Create tag',
           task: ctx => execa('git', ['tag', `v${ctx.version}`], execaOpts)
+        },
+        {
+          title: 'Push commit',
+          task: () => execa('git', ['push', 'origin', 'master'], execaOpts)
+        },
+        {
+          title: 'Push tag',
+          task: ctx =>
+            execa('git', ['push', 'origin', `v${ctx.version}`], execaOpts)
         }
-        // TODO: push tag
       ])
+  },
+  {
+    title: 'Publish build',
+    task: () => execa('npm', ['publish'], execaOpts)
   }
 ])
 
-function publish(version) {
+async function publish(version) {
+  const branch = await execa.stdout(
+    'git',
+    ['rev-parse', '--abbrev-ref', 'HEAD'],
+    execaOpts
+  )
+
+  if (branch !== allowedBranch) {
+    bail(`You can only publish from the ${allowedBranch} branch`)
+  }
+
   log(`Publishing v${version}\n`)
+
   tasks.run({ version }).then(
     ctx => {
       log(`\nv${version} published!`)
