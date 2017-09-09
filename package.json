@@ -39,6 +39,7 @@
     "fmt:code": "prettier --write --list-different --no-semi --single-quote \"{src,build}/**/*.{js,css}\" || true",
     "fmt:package": "sort-package-json",
     "format": "run-s fmt",
+    "release": "node ./build/publish.js",
     "test": "karma start ./test/karma.config.js --singleRun",
     "test:watch": "karma start ./test/karma.config.js"
   },
