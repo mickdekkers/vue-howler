@@ -57,7 +57,7 @@ module.exports = function(config) {
           'vue$': 'vue/dist/vue.esm.js'
         }
       },
-      devtool: 'source-map'
+      devtool: 'inline-source-map'
     },
 
     // avoid walls of useless text
