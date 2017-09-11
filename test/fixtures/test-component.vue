@@ -1,5 +1,5 @@
 <script>
-  import VueHowler from '../../dist/vue-howler'
+  import VueHowler from '../../dist/vue-howler.esm.js'
 
   export default {
     mixins: [VueHowler]
