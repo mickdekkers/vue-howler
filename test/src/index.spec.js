@@ -120,4 +120,31 @@ describe('Basic Functionality', () => {
     expect(component.playing).to.equal(false)
     expect(component.seek).to.equal(0)
   })
+
+  it('Component.play() starts playback after stop()', async () => {
+    const playPromise = eventPromise(component, 'play')
+    component.play()
+    await playPromise
+
+    expect(component.playing).to.equal(true)
+  })
+
+  it('Component.pause() pauses playback', async () => {
+    await wait(1000)
+
+    const pausePromise = eventPromise(component, 'pause')
+    component.pause()
+    await pausePromise
+
+    expect(component.playing).to.equal(false)
+    expect(component.seek).to.be.greaterThan(0)
+  })
+
+  it('Component.play() starts playback after pause()', async () => {
+    const playPromise = eventPromise(component, 'play')
+    component.play()
+    await playPromise
+
+    expect(component.playing).to.equal(true)
+  })
 })
