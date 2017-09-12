@@ -6,6 +6,11 @@ import { eventPromise, wait } from './helpers'
 import { mount } from 'vue-test-utils'
 import { Howl } from 'howler'
 
+/**
+ * The duration of the RetroFuture Clean mp3 in seconds
+ */
+const MP3_DURATION = 206
+
 const getWrapper = options => {
   return mount(
     TestComponent,
@@ -77,6 +82,12 @@ describe('Basic Initialization', function() {
   })
 
   it('Component emits "load" event', () => loadPromise)
+
+  it('Component.duration is set correctly', () => {
+    const measuredDuration = Math.round(component.duration)
+    const actualDuration = Math.round(MP3_DURATION)
+    expect(measuredDuration).to.equal(actualDuration)
+  })
 })
 
 describe('Basic Functionality', () => {
