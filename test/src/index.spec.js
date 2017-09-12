@@ -73,12 +73,24 @@ describe('Basic Initialization', function() {
     expect(component.$data._howl).to.be.an.instanceof(Howl)
   })
 
-  it('Component.seek === 0', () => {
-    expect(component.seek).to.equal(0)
-  })
-
   it('Component.playing === false', () => {
     expect(component.playing).to.equal(false)
+  })
+
+  it('Component.muted === false', () => {
+    expect(component.muted).to.equal(false)
+  })
+
+  it('Component.volume === 100%', () => {
+    expect(component.volume).to.equal(1)
+  })
+
+  it('Component.rate === 100%', () => {
+    expect(component.rate).to.equal(1)
+  })
+
+  it('Component.seek === 0', () => {
+    expect(component.seek).to.equal(0)
   })
 
   it('Component emits "load" event', () => loadPromise)
@@ -230,5 +242,80 @@ describe('Seek Behavior', () => {
 
     await wait(500)
     expect(component.seek).to.equal(lastSeek)
+  })
+})
+
+describe('Volume Behavior', () => {
+  const wrapper = getWrapper()
+  const component = wrapper.vm
+
+  // Start listening for load event right away so we don't miss it
+  const loadPromise = eventPromise(component, 'load')
+
+  it('Volume can be set when initialized', async () => {
+    await loadPromise
+
+    expect(component.volume).to.equal(1)
+
+    const volumePromise = eventPromise(component, 'volume')
+    component.setVolume(0.5)
+    await volumePromise
+
+    expect(component.volume).to.equal(0.5)
+  })
+
+  it('Volume can be set when playing', async () => {
+    const playPromise = eventPromise(component, 'play')
+    component.play()
+    await playPromise
+
+    const volumePromise = eventPromise(component, 'volume')
+    component.setVolume(0.2)
+    await volumePromise
+
+    const lastVolume = component.volume
+    expect(lastVolume).to.equal(0.2)
+
+    await wait(500)
+
+    expect(component.volume).to.equal(lastVolume)
+  })
+
+  it('Volume can be set when stopped', async () => {
+    const stopPromise = eventPromise(component, 'stop')
+    component.stop()
+    await stopPromise
+
+    const volumePromise = eventPromise(component, 'volume')
+    component.setVolume(0.4)
+    await volumePromise
+
+    const lastVolume = component.volume
+    expect(lastVolume).to.equal(0.4)
+
+    await wait(500)
+    expect(component.volume).to.equal(lastVolume)
+  })
+
+  it('Volume can be set when paused', async () => {
+    const playPromise = eventPromise(component, 'play')
+    component.play()
+    await playPromise
+
+    await wait(500)
+
+    const pausePromise = eventPromise(component, 'pause')
+    component.pause()
+    await pausePromise
+
+    const volumePromise = eventPromise(component, 'volume')
+    component.setVolume(0.4)
+    await volumePromise
+
+    const lastVolume = component.volume
+    expect(lastVolume).to.equal(0.4)
+
+    await wait(500)
+    expect(component.volume).to.equal(lastVolume)
   })
 })
