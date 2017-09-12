@@ -21,7 +21,8 @@ process.env.CHROMIUM_BIN = revisionInfo.executablePath
  */
 module.exports = function(config) {
   config.set({
-    browsers: ['ChromiumHeadless'],
+    // browsers: ['ChromiumHeadless'],
+    browsers: ['Chrome'],
 
     frameworks: ['mocha'],
 
@@ -47,14 +48,34 @@ module.exports = function(config) {
             exclude: /node_modules/,
             options: _.assign(babelConfig, {
               babelrc: false,
-              plugins: _.without(babelConfig.plugins, 'external-helpers')
+              plugins: _.concat(
+                _.without(babelConfig.plugins, 'external-helpers'),
+                [
+                  [
+                    'fast-async',
+                    {
+                      useRuntimeModule: true,
+                      compiler: {
+                        promises: false
+                      }
+                    }
+                  ]
+                ]
+              )
             })
+          },
+          {
+            test: /\.mp3$/,
+            loader: 'file-loader',
+            options: {
+              name: '[name]-[md5:hash:hex:7].[ext]'
+            }
           }
         ]
       },
       resolve: {
         alias: {
-          'vue$': 'vue/dist/vue.esm.js'
+          vue$: 'vue/dist/vue.esm.js'
         }
       },
       devtool: 'inline-source-map'
@@ -72,7 +93,6 @@ module.exports = function(config) {
 
     // enable / disable colors in the output (reporters and logs)
     colors: true,
-
 
     // level of logging
     // possible values: config.LOG_DISABLE || config.LOG_ERROR ||

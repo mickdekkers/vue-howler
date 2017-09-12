@@ -1,3 +1,5 @@
+require('nodent-runtime')
+
 import Vue from 'vue'
 
 // Disable Vue console tips
