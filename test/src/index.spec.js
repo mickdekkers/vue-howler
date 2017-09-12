@@ -148,3 +148,87 @@ describe('Basic Functionality', () => {
     expect(component.playing).to.equal(true)
   })
 })
+
+describe('Seek Behavior', () => {
+  const wrapper = getWrapper()
+  const component = wrapper.vm
+
+  // Start listening for load event right away so we don't miss it
+  const loadPromise = eventPromise(component, 'load')
+
+  it('Seek can be set when initialized', async () => {
+    await loadPromise
+
+    expect(component.seek).to.equal(0)
+
+    const seekPromise = eventPromise(component, 'seek')
+    component.setSeek(5)
+    await seekPromise
+
+    expect(component.seek).to.equal(5)
+  })
+
+  it('Seek can be set when playing', async () => {
+    const playPromise = eventPromise(component, 'play')
+    component.play()
+    await playPromise
+
+    expect(component.playing).to.equal(true)
+
+    const seekPromise = eventPromise(component, 'seek')
+    component.setSeek(30)
+    await seekPromise
+
+    expect(component.playing).to.equal(true)
+    const lastSeek = component.seek
+    expect(lastSeek).to.be.greaterThan(29)
+
+    await wait(500)
+
+    expect(component.seek).to.be.greaterThan(lastSeek)
+  })
+
+  it('Seek can be set when stopped', async () => {
+    const stopPromise = eventPromise(component, 'stop')
+    component.stop()
+    await stopPromise
+
+    expect(component.playing).to.equal(false)
+
+    const seekPromise = eventPromise(component, 'seek')
+    component.setSeek(7)
+    await seekPromise
+
+    expect(component.playing).to.equal(false)
+    const lastSeek = component.seek
+    expect(lastSeek).to.equal(7)
+
+    await wait(500)
+    expect(component.seek).to.equal(lastSeek)
+  })
+
+  it('Seek can be set when paused', async () => {
+    const playPromise = eventPromise(component, 'play')
+    component.play()
+    await playPromise
+
+    await wait(500)
+
+    const pausePromise = eventPromise(component, 'pause')
+    component.pause()
+    await pausePromise
+
+    expect(component.playing).to.equal(false)
+
+    const seekPromise = eventPromise(component, 'seek')
+    component.setSeek(9)
+    await seekPromise
+
+    expect(component.playing).to.equal(false)
+    const lastSeek = component.seek
+    expect(lastSeek).to.equal(9)
+
+    await wait(500)
+    expect(component.seek).to.equal(lastSeek)
+  })
+})
