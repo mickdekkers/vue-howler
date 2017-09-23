@@ -117,13 +117,11 @@ var objectAssign$1 = shouldUseNative() ? Object.assign : function (target, sourc
 	return to;
 };
 
-var babelHelpers = {};
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
   return typeof obj;
 } : function (obj) {
   return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
 };
-babelHelpers;
 
 var index = {
   props: {
@@ -371,7 +369,9 @@ var index = {
       var resetSettings = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
 
       // Stop all playback
-      this.stop();
+      if (this.$data._howl) {
+        this.stop();
+      }
 
       // Stop all polls
       objectValues(this.$data._polls).forEach(function (poll) {
@@ -381,7 +381,9 @@ var index = {
       // Clear all event listeners
       this.$data._howlEvents.map(function (event) {
         if (event.handler) {
-          _this3.$data._howl.off(event.name, event.handler);
+          if (_this3.$data._howl) {
+            _this3.$data._howl.off(event.name, event.handler);
+          }
 
           var _event = objectAssign$1({}, event);
           delete _event.handler;

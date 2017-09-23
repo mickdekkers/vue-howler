@@ -254,7 +254,9 @@ export default {
      */
     _cleanup(resetSettings = true) {
       // Stop all playback
-      this.stop()
+      if (this.$data._howl) {
+        this.stop()
+      }
 
       // Stop all polls
       values(this.$data._polls).forEach(poll => {
@@ -264,7 +266,9 @@ export default {
       // Clear all event listeners
       this.$data._howlEvents.map(event => {
         if (event.handler) {
-          this.$data._howl.off(event.name, event.handler)
+          if (this.$data._howl) {
+            this.$data._howl.off(event.name, event.handler)
+          }
 
           const _event = assign({}, event)
           delete _event.handler
