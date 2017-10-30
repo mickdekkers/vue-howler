@@ -158,6 +158,9 @@ describe('Basic Functionality', () => {
     await playPromise
 
     expect(component.playing).to.equal(true)
+
+    // Pause playback after tests
+    component.pause()
   })
 })
 
