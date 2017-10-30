@@ -1,5 +1,5 @@
 /*
- * vue-howler v0.4.2
+ * vue-howler v0.5.0
  * (c) 2017 Mick Dekkers
  * Released under the MIT License.
  */
@@ -117,11 +117,13 @@ var objectAssign$1 = shouldUseNative() ? Object.assign : function (target, sourc
 	return to;
 };
 
+var babelHelpers = {};
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
   return typeof obj;
 } : function (obj) {
   return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
 };
+babelHelpers;
 
 var index = {
   props: {

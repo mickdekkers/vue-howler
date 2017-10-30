@@ -1,5 +1,5 @@
 /*
- * vue-howler v0.4.2
+ * vue-howler v0.5.0
  * (c) 2017 Mick Dekkers
  * Released under the MIT License.
  */
