@@ -193,9 +193,9 @@ Set the progress of the playback (value is clamped between `0` and `1`)
 
 ## License
 
-MIT © [Blocklevel][blocklevel-gh]
+MIT © [Mick Dekkers][mickdekkers-gh]
 
 [howler]: https://howlerjs.com/
 [mixins]: https://vuejs.org/v2/guide/mixins.html
-[blocklevel-gh]: https://github.com/blocklevel
+[mickdekkers-gh]: https://github.com/mickdekkers
 [npm]: https://www.npmjs.com/package/vue-howler

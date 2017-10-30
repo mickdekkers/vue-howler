@@ -14,9 +14,9 @@
     "wav",
     "webm"
   ],
-  "homepage": "https://github.com/Blocklevel/vue-howler#readme",
+  "homepage": "https://github.com/mickdekkers/vue-howler#readme",
   "bugs": {
-    "url": "https://github.com/Blocklevel/vue-howler/issues"
+    "url": "https://github.com/mickdekkers/vue-howler/issues"
   },
   "license": "MIT",
   "author": {
@@ -31,7 +31,7 @@
   "module": "dist/vue-howler.esm.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Blocklevel/vue-howler.git"
+    "url": "git+https://github.com/mickdekkers/vue-howler.git"
   },
   "scripts": {
     "build": "node build/build.js",
