@@ -21,9 +21,9 @@ export default {
     /**
     * An array of audio file types
     */
-    formats : {
-      type : Array,
-      default : [],
+    formats: {
+      type: Array,
+      default: []
     },
     /**
      * Whether to start the playback
@@ -218,7 +218,7 @@ export default {
     _initialize() {
       this.$data._howl = new Howl({
         src: this.sources,
-        format : this.formats,
+        format: this.formats,
         volume: this.volume,
         rate: this.rate,
         mute: this.muted,
