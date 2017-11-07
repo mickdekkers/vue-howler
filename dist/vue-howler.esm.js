@@ -1,5 +1,5 @@
 /*
- * vue-howler v0.5.0
+ * vue-howler v0.6.0
  * (c) 2017 Mick Dekkers
  * Released under the MIT License.
  */
@@ -139,6 +139,13 @@ var index = {
           return typeof source === 'string' && source.length > 0;
         });
       }
+    },
+    /**
+    * An array of audio file types
+    */
+    formats: {
+      type: Array,
+      default: []
     },
     /**
      * Whether to start the playback
@@ -323,6 +330,7 @@ var index = {
 
       this.$data._howl = new Howl({
         src: this.sources,
+        format: this.formats,
         volume: this.volume,
         rate: this.rate,
         mute: this.muted,
