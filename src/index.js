@@ -19,6 +19,13 @@ export default {
       }
     },
     /**
+    * An array of audio file types
+    */
+    formats : {
+      type : Array,
+      default : [],
+    },
+    /**
      * Whether to start the playback
      * when the component is mounted
      */
@@ -211,6 +218,7 @@ export default {
     _initialize() {
       this.$data._howl = new Howl({
         src: this.sources,
+        format : this.formats,
         volume: this.volume,
         rate: this.rate,
         mute: this.muted,
