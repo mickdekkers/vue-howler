@@ -74,12 +74,11 @@ Type: `String[]` - Required
 
 An array of audio file urls
 
-#### `autoplay`
+#### `html5`
 
 Type: `Boolean` - Default: `false`
 
-Whether to start the playback
-when the component is mounted
+Whether to force HTML5 Audio
 
 #### `loop`
 
@@ -95,11 +94,27 @@ Type: `Boolean` - Default: `true`
 Whether to start downloading the audio
 file when the component is mounted
 
-#### `html5`
+#### `autoplay`
 
 Type: `Boolean` - Default: `false`
 
-Whether to force HTML5 Audio
+Whether to start the playback
+when the component is mounted
+
+#### `formats`
+
+Type: `String[]` - Default: `[]`
+
+Howler.js automatically detects your file format from the extension,
+but you may also specify a format in situations where extraction won't work
+(such as with a SoundCloud stream)
+
+#### `xhrWithCredentials`
+
+Type: `Boolean` - Default: `false`
+
+Whether to enable the `withCredentials` flag on XHR requests
+used to fetch audio files when using Web Audio API ([see reference](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/withCredentials))
 
 ### Data
 

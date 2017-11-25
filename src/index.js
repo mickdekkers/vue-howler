@@ -19,15 +19,6 @@ export default {
       }
     },
     /**
-    * An array of audio file types
-    */
-    formats: {
-      type: Array,
-      default () {
-        return []
-      }
-    },
-    /**
      * Whether to start the playback
      * when the component is mounted
      */
@@ -55,6 +46,23 @@ export default {
      * Whether to force HTML5 Audio
      */
     html5: {
+      type: Boolean,
+      default: false
+    },
+    /**
+    * An array of audio file types
+    */
+    formats: {
+      type: Array,
+      default() {
+        return []
+      }
+    },
+    /**
+     * Whether to enable the withCredentials flag on XHR
+     * requests used to fetch audio files when using Web Audio API
+     */
+    xhrWithCredentials: {
       type: Boolean,
       default: false
     }
@@ -115,6 +123,7 @@ export default {
           }
         },
         'loaderror',
+        'playerror',
         {
           name: 'play',
           hook: () => {
@@ -220,14 +229,15 @@ export default {
     _initialize() {
       this.$data._howl = new Howl({
         src: this.sources,
-        format: this.formats,
         volume: this.volume,
-        rate: this.rate,
-        mute: this.muted,
-        autoplay: this.autoplay,
+        html5: this.html5,
         loop: this.loop,
         preload: this.preload,
-        html5: this.html5
+        autoplay: this.autoplay,
+        mute: this.muted,
+        rate: this.rate,
+        format: this.formats,
+        xhrWithCredentials: this.xhrWithCredentials
       })
 
       const duration = this.$data._howl.duration()
