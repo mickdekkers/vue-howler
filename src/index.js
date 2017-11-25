@@ -23,7 +23,9 @@ export default {
     */
     formats: {
       type: Array,
-      default: []
+      default () {
+        return []
+      }
     },
     /**
      * Whether to start the playback
