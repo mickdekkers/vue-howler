@@ -1,6 +1,6 @@
 {
   "name": "vue-howler",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "description": "A Howler.js mixin for Vue 2 that makes it easy to create custom audio player components",
   "keywords": [
     "aac",
