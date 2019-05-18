@@ -1,6 +1,6 @@
 {
   "name": "vue-howler",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "description": "A Howler.js mixin for Vue 2 that makes it easy to create custom audio player components",
   "keywords": [
     "aac",
@@ -44,7 +44,7 @@
     "test:watch": "karma start ./test/karma.config.js"
   },
   "dependencies": {
-    "howler": "^2.0.5",
+    "howler": "^2.1.2",
     "math-clamp": "^1.0.0",
     "object-assign": "^4.1.1",
     "object-values": "^1.0.0"
