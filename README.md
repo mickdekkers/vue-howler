@@ -4,7 +4,7 @@ A [Howler.js][howler] [mixin][mixins] for Vue 2 that makes it easy to create cus
 ## Installation
 
 ```bash
-$ npm install vue-howler
+$ npm install sirg2003/vue-howler
 ```
 
 ## Usage
